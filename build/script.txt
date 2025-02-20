@@ -1,0 +1,31 @@
+
+1. linuxdeployqt 설치
+wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+
+2. linuxdeployqt 실행 
+./linuxdeployqt-continuous-x86_64.AppImage your-qt-app-binary -appimage
+
+3. 추가 옵션
+linuxdeployqt에는 다양한 옵션이 있습니다. 몇 가지 유용한 옵션을 소개하면:
+-qmldir=<path>: QML 파일이 있는 디렉토리를 지정합니다.
+-no-plugins: Qt 플러그인들을 포함하지 않습니다.
+-no-translations: 번역 파일들을 포함하지 않습니다.
+-bundle-non-qt-libs: Qt 외의 라이브러리들도 포함시킵니다. <--- 이거 꼭 사용 !!
+-executable=<executable>: 배포 패키지에 추가할 추가 실행 파일을 지정합니다.
+
+3. [SNU_BMT_GUI 폴더에서 실행 예제] : 아래처럼 qmake 위치 명기 (-qmake=...) 해줘야 제대로 찾아가는 경우 발생하여 추가함
+./linuxdeployqt-continuous-x86_64.AppImage \
+  build/Desktop_Qt_6_6_3_GCC_64bit-Release/SNU_AI_BMT_GUI \
+  -qmake=/home/sjh/Qt/6.6.3/gcc_64/bin/qmake \
+  -appimage -bundle-non-qt-libs -no-translations
+
+4. 만약 SNU_AI_BMT_GUI 에 대해서, linuxdeployqt 진행할때, 동일 위치의 libSNU_AI_BMT_GUI_Library.so를 찾지 못한다는 에러 발생시 
+아래와 같이 환경 변수에 라이브러리 경로를 추가해야 함 (ERROR: ldd outputLine: "libSNU_AI_BMT_GUI_Library.so => not found")
+export LD_LIBRARY_PATH=/home/sjh/SNU_BMT_GUI/build/Desktop_Qt_6_6_3_GCC_64bit-Release:$LD_LIBRARY_PATH
+
+5. tar 압축 
+tar czvf Desktop_Qt_6_7_2-Release-linuxdeployqt-applied.tar.gz -C ~/SNU_BMT_GUI/build/Desktop_Qt_6_7_2-Release .
+
+6. tar 압축 해제
+tar xzvf Desktop_Qt_6_7_2-Release-linuxdeployqt-applied.tar.gz
