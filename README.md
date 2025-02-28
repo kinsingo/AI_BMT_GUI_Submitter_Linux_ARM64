@@ -105,7 +105,7 @@ export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
 
 **Run all commands at once (For Rebuild)**
 ```bash
-rm -rf CMakeCache.txt CMakeFiles
+rm -rf CMakeCache.txt CMakeFiles SNU_BMT_GUI_Submitter
 cmake -G "Ninja" ..
 cmake --build .
 export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
