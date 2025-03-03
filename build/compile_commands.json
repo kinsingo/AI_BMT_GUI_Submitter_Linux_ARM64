@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/orange/Desktop/SNU_BMT_GUI_Submitter_Linux_ARM64/build",
+  "command": "/usr/bin/aarch64-linux-gnu-g++   -I../include  -g   -std=gnu++17 -o CMakeFiles/SNU_BMT_GUI_Submitter.dir/main.cpp.o -c /home/orange/Desktop/SNU_BMT_GUI_Submitter_Linux_ARM64/main.cpp",
+  "file": "/home/orange/Desktop/SNU_BMT_GUI_Submitter_Linux_ARM64/main.cpp"
+}
+]
