@@ -32,3 +32,12 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 # Step 3
 LIST(APPEND link_libs ${CMAKE_CURRENT_SOURCE_DIR}/build/libSNU_AI_BMT_GUI_Library.so)
 add_target(SNU_BMT_GUI_Submitter)
+
+
+#Classification
+set(classification 
+classification_singleCore.cpp
+classification_multiCore_callBack.cpp
+classification_multiCore_wait.cpp)
+add_executable(run_classifier ${classification})
+add_target(run_classifier)

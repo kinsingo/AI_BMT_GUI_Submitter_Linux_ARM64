@@ -7,7 +7,7 @@
 
 # =============================================================================
 # Project: SNU_BMT_GUI_Submitter_App
-# Configuration: 
+# Configuration: Debug
 # =============================================================================
 # =============================================================================
 
@@ -25,7 +25,7 @@ rule CUSTOM_COMMAND
 rule CXX_COMPILER__SNU_BMT_GUI_Submitter
   depfile = $DEP_FILE
   deps = gcc
-  command = /usr/bin/c++  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  command = /usr/bin/aarch64-linux-gnu-g++  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
   description = Building CXX object $out
 
 
@@ -33,7 +33,7 @@ rule CXX_COMPILER__SNU_BMT_GUI_Submitter
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__SNU_BMT_GUI_Submitter
-  command = $PRE_LINK && /usr/bin/c++  $FLAGS  $LINK_FLAGS $in  -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  command = $PRE_LINK && /usr/bin/aarch64-linux-gnu-g++  $FLAGS  $LINK_FLAGS $in  -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
 
