@@ -74,40 +74,48 @@ public:
 
     virtual vector<BMTResult> runInference(const vector<VariantType> &data) override
     {
-        vector<BMTResult> batchResult;
-        int batchSize = data.size();
-
-        vector<int> reqIds;
-        vector<vector<uint8_t>> inputBufs(batchSize); // the inputBuf's memory must be maintained until the callback function or wait is called.
+        int querySize = data.size();
+        vector<BMTResult> queryResult(querySize);
+        vector<int> reqIds(querySize);
+        vector<vector<uint8_t>> inputBufs(querySize); // the inputBuf's memory must be maintained until the callback function or wait is called.
         const int maxConcurrentRequests = 3;
 
-        for (int i = 0; i < batchSize; i += maxConcurrentRequests)
+        for (int i = 0; i < querySize; i += maxConcurrentRequests)
         {
-            reqIds.clear();
-            int currentBatchSize = min(maxConcurrentRequests, batchSize - i);
+            int currentBatchSize = min(maxConcurrentRequests, querySize - i);
 
             // Start a batch of RunAsync calls
             for (int j = 0; j < currentBatchSize; j++)
             {
                 int index = i + j;
                 inputBufs[index] = get<vector<uint8_t>>(data[index]);
-                reqIds.push_back(ie->RunAsync(inputBufs[index].data()));
+                reqIds[index] = (ie->RunAsync(inputBufs[index].data()));
             }
 
-            // Wait for all requests in the current batch
+            // 병렬 처리로 Wait 실행
+            vector<std::future<void>> futures;
             for (int j = 0; j < currentBatchSize; j++)
             {
                 int index = i + j;
-                auto outputs = ie->Wait(reqIds[j]);
+                futures.push_back(std::async(std::launch::async, [&, index]()
+                                             {
+                auto outputs = ie->Wait(reqIds[index]);
+                inputBufs[index].clear(); // input buffer 해제
+
                 BMTResult result;
                 int predictedIndex = (ie->outputs().front().type() == dxrt::DataType::FLOAT)
                                          ? getArgMax((float *)outputs.front()->data(), 1000)
                                          : *(uint16_t *)outputs.front()->data();
                 result.Classification_ImageNet2012_PredictedIndex_0_to_999 = predictedIndex;
-                batchResult.push_back(result);
+                queryResult[index] = result; }));
+            }
+
+            // 모든 요청 완료 대기
+            for (auto &f : futures)
+            {
+                f.get();
             }
         }
-
-        return batchResult;
+        return queryResult;
     }
 };
