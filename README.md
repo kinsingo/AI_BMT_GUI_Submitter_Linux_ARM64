@@ -1,4 +1,4 @@
-> **Last Updated:** 2025-03-03
+> **Last Updated:** 2025-03-21
 ## Environment
  1. ISA(Instruction Set Architecture) : ARM64(aarch64)
  2. OS : Ubuntu 24.04 LTS
@@ -186,6 +186,11 @@ rm -rf CMakeCache.txt CMakeFiles SNU_BMT_GUI_Submitter
 cmake -G "Ninja" ..
 cmake --build .
 export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
+./SNU_BMT_GUI_Submitter
+```
+
+**Execute AI-BMT App**
+```bash
 ./SNU_BMT_GUI_Submitter
 ```
 
