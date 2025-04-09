@@ -25,7 +25,7 @@ public:
         data.cooling = "";                                // e.g., Air, Liquid, Passive
         data.cooling_option = "";                         // e.g., Active, Passive (Active = with fan/pump, Passive = without fan)
         data.cpu_accelerator_interconnect_interface = ""; // e.g., PCIe Gen5 x16
-        data.benchmark_model = "";                        // e.g., ResNet-50
+        data.benchmark_model = "resnet50";                // e.g., ResNet-50
         data.operating_system = "";                       // e.g., Ubuntu 20.04.5 LTS
         return data;
     }
@@ -74,7 +74,7 @@ public:
 int main(int argc, char *argv[])
 {
     filesystem::path exePath = filesystem::absolute(argv[0]).parent_path(); // Get the current executable file path
-    filesystem::path model_path = exePath / "Model" / "Classification" / "resnet50_v2_opset10_dynamicBatch.onnx";
+    filesystem::path model_path = exePath / "Model" / "Classification" / "resnet50_opset10.onnx";
     string modelPath = model_path.string();
     try
     {
