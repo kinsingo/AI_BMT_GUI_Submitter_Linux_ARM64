@@ -106,7 +106,7 @@ public:
                 int predictedIndex = (ie->outputs().front().type() == dxrt::DataType::FLOAT)
                                          ? getArgMax((float *)outputs.front()->data(), 1000)
                                          : *(uint16_t *)outputs.front()->data();
-                result.Classification_ImageNet2012_PredictedIndex_0_to_999 = predictedIndex;
+                result.Classification_ImageNet_PredictedIndex_0_to_999 = predictedIndex;
                 queryResult[index] = result; }));
             }
 

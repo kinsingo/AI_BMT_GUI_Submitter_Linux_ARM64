@@ -1,14 +1,20 @@
-> **Last Updated:** 2025-04-09
+> **Last Updated:** 2025-04-15
+
 ## Environment
- 1. ISA(Instruction Set Architecture) : ARM64(aarch64)
- 2. OS : Ubuntu 24.04 LTS
+
+1.  ISA(Instruction Set Architecture) : ARM64(aarch64)
+2.  OS : Ubuntu 24.04 LTS
+
 ## Submitter User Guide Steps
+
 Step1) Build System Set-up  
 Step2) Interface Implementation  
 Step3) Build and Start BMT
 
 ## Step 1) Build System Set-up (Installation Guide for Ubuntu)
+
 **1. Install Packages**
+
 - Open a terminal and run the following commands to install CMake, g++ compiler, Ninja Build System, and EGL Library.
   ```bash
   sudo apt update
@@ -30,10 +36,11 @@ Step3) Build and Start BMT
   ```
 
 ## Step2) Interface Implementation
+
 - Implement the overridden functions in the `Virtual_Submitter_Implementation` class, which inherits from the `SNU_BMT_Interface` interface, within `main.cpp`.
 - Ensure that these functions operate correctly on the intended computing unit (e.g., CPU, GPU, NPU).
 - To ensure that external headers (.h), source files (.cpp), or libraries required for implementing inference on the target hardware are included during the build process, make sure to update the **CMakeLists.txt** accordingly.
-![SNU_BMT_Interface_Diagram_For_README](https://github.com/user-attachments/assets/a67c4ca7-2b40-451d-9d91-3202fdf2a673)
+  ![SNU_BMT_Interface_Diagram_For_README](https://github.com/user-attachments/assets/a67c4ca7-2b40-451d-9d91-3202fdf2a673)
 
 ```cpp
 #ifndef SNU_BMT_INTERFACE_H
@@ -43,11 +50,11 @@ using namespace std;
 
 // Represents the result of the inference process for a single batch.
 // Fields:
-// - Classification_ImageNet2012_PredictedIndex_0_to_999: An integer representing the predicted class index (0-999) for the ImageNet dataset.
+// - Classification_ImageNet_PredictedIndex_0_to_999: An integer representing the predicted class index (0-999) for the ImageNet dataset.
 struct EXPORT_SYMBOL BMTResult
 {
     // While conducting Classification BMT, if the value is not between 0 and 999, it indicates that the result has not been updated and will be treated as an error.
-    int Classification_ImageNet2012_PredictedIndex_0_to_999 = -1;
+    int Classification_ImageNet_PredictedIndex_0_to_999 = -1;
 
     // While conducting Object Detection BMT
     vector<Coco17DetectionResult> objectDetectionResult;
@@ -120,7 +127,6 @@ public:
 #endif // SNU_BMT_INTERFACE_H
 ```
 
-
 ## Step3) Build and Start BMT
 
 **1. Open the Linux terminal**
@@ -164,6 +170,7 @@ public:
   ```
 
 **Run all commands at once (For Initial Build)**
+
 ```bash
 git clone https://github.com/kinsingo/SNU_BMT_GUI_Submitter_Linux.git
 cd SNU_BMT_GUI_Submitter_Linux/build/
@@ -181,6 +188,7 @@ export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
 ```
 
 **Run all commands at once (For Rebuild)**
+
 ```bash
 rm -rf CMakeCache.txt CMakeFiles SNU_BMT_GUI_Submitter
 cmake -G "Ninja" ..
@@ -190,7 +198,7 @@ export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
 ```
 
 **Execute AI-BMT App**
+
 ```bash
 ./SNU_BMT_GUI_Submitter
 ```
-

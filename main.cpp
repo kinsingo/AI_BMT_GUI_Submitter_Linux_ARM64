@@ -62,7 +62,7 @@ public:
             }
 
             BMTResult result;
-            result.Classification_ImageNet2012_PredictedIndex_0_to_999 = 500; // temporary value(0~999) is assigned here. It should be replaced with the actual predicted value.
+            result.Classification_ImageNet_PredictedIndex_0_to_999 = 500; // temporary value(0~999) is assigned here. It should be replaced with the actual predicted value.
             batchResult.push_back(result);
 
             delete[] realData; // Since realData was created as an unmanaged dynamic array in convertToData(..) in this example, it should be deleted after being used as below.

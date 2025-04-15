@@ -152,7 +152,7 @@ public:
             for (int j = 0; j < currentBatchSize; j++)
             {
                 BMTResult result;
-                result.Classification_ImageNet2012_PredictedIndex_0_to_999 = predictedIndexes[j];
+                result.Classification_ImageNet_PredictedIndex_0_to_999 = predictedIndexes[j];
                 batchResult.push_back(result);
             }
         }

@@ -73,7 +73,7 @@ public:
             auto outputs = ie->Run(inputBuf.data());
             BMTResult result;
             int index = (ie->outputs().front().type() == dxrt::DataType::FLOAT) ? getArgMax((float *)outputs.front()->data(), 1000) : *(uint16_t *)outputs.front()->data();
-            result.Classification_ImageNet2012_PredictedIndex_0_to_999 = index; // temporary value(0~999) is assigned here. It should be replaced with the actual predicted value.
+            result.Classification_ImageNet_PredictedIndex_0_to_999 = index; // temporary value(0~999) is assigned here. It should be replaced with the actual predicted value.
             batchResult.push_back(result);
         }
         return batchResult;
