@@ -1,16 +1,22 @@
 Our platform provides the following datasets for evaluation purposes.
 
 ────────────────────────────────────────────────────────────
-1. ImageNetV2
+1. ImageNetV2 (Preprocessed Version)
 ────────────────────────────────────────────────────────────
 • Source: https://github.com/modestyachts/ImageNetV2  
-• License: Creative Commons Attribution 4.0 International (CC BY 4.0)  
-  You are free to:
+• Original License: Creative Commons Attribution 4.0 International (CC BY 4.0)  
+• Modifications: Images have been resized to 232×232 and center-cropped to 224×224.  
+• Redistribution: This preprocessed version is redistributed by our platform under the same CC BY 4.0 license.  
+• You are free to:
    - Share — copy and redistribute the material in any medium or format  
    - Adapt — remix, transform, and build upon the material  
   Under the following terms:
-   - Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made.  
-  • License Text: https://creativecommons.org/licenses/by/4.0
+   - Attribution — You must give appropriate credit, provide a link to the license, and indicate that changes were made.  
+• License Text: https://creativecommons.org/licenses/by/4.0
+
+Please cite the original dataset creators as follows:  
+> ImageNetV2: https://github.com/modestyachts/ImageNetV2  
+> Recht, B. et al., “Do ImageNet Classifiers Generalize to ImageNet?” ICML 2019.
 
 ────────────────────────────────────────────────────────────
 2. COCO 2017
@@ -21,12 +27,8 @@ Our platform provides the following datasets for evaluation purposes.
    - Share and adapt the material for any purpose, even commercially  
   Under the following terms:
    - Attribution — You must give appropriate credit and indicate if changes were made.  
-  • License Text: https://creativecommons.org/licenses/by/4.0
+• License Text: https://creativecommons.org/licenses/by/4.0
 
 ────────────────────────────────────────────────────────────
-Redistribution and modification of these datasets are permitted under the terms of the original licenses listed above.  
-All derived content remains subject to those terms. If you use these datasets, you must provide proper attribution to the original authors.
-
-For inquiries or licensing concerns, please contact:  
-Jonghyun Shin (Seoul National University)  
-📧 jonghyun_shin@naver.com
+All redistributed and derived content complies with the terms of the original licenses listed above.  
+If you use these datasets or the modified versions, you must provide proper attribution to the original authors and indicate any modifications made.
