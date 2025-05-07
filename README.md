@@ -1,4 +1,4 @@
-> **Last Updated:** 2025-04-15
+> **Last Updated:** 2025-05-07
 
 ## Environment
 
@@ -53,11 +53,16 @@ using namespace std;
 // - Classification_ImageNet_PredictedIndex_0_to_999: An integer representing the predicted class index (0-999) for the ImageNet dataset.
 struct EXPORT_SYMBOL BMTResult
 {
-    // While conducting Classification BMT, if the value is not between 0 and 999, it indicates that the result has not been updated and will be treated as an error.
-    int Classification_ImageNet_PredictedIndex_0_to_999 = -1;
+    // Output scores for 1000 ImageNet classes from the classification model.
+    // Each element represents the probability or confidence score for a class.
+    // Total size must be exactly 1,000 elements.
+    vector<float> classProbabilities;
 
-    // While conducting Object Detection BMT
-    vector<Coco17DetectionResult> objectDetectionResult;
+    // Output tensor from object detection model.
+    // The vector stores raw model outputs for 25200 detection candidates.
+    // Each candidate includes 85 values: [x, y, w, h, objectness, 80 class scores].
+    // Total size must be exactly 25200 * 85 = 2,142,000 elements.
+    vector<float> objectDetectionResult;
 };
 
 // Stores optional system configuration data provided by the Submitter.
@@ -114,7 +119,8 @@ public:
    // It is recommended to use this instead of a constructor,
    // as it allows handling additional errors that cannot be managed within the constructor.
    // The Initialize function is guaranteed to be called before convertToData and runInference are executed.
-   virtual void Initialize() = 0;
+   // The submitter can load the model using the provided modelPath
+   virtual void Initialize(string modelPath) = 0;
 
    // Performs preprocessing before AI inference to convert data into the format required by the AI Processing Unit.
    // This method prepares model input data and is excluded from latency/throughput performance measurements.

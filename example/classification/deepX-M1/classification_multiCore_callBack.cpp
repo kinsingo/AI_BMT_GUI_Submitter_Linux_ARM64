@@ -74,18 +74,12 @@ int onInferenceCallbackFunc(vector<shared_ptr<dxrt::Tensor>> outputs, void *user
 
 class Classification_Implementation_MultiCore_CallBack : public SNU_BMT_Interface
 {
-    string modelPath;
     shared_ptr<dxrt::InferenceEngine> ie;
     int align_factor;
     int input_w = 224, input_h = 224, input_c = 3;
     int batchSize = -1;
 
 public:
-    Classification_Implementation_MultiCore_CallBack(string modelPath)
-    {
-        this->modelPath = modelPath;
-    }
-
     virtual Optional_Data getOptionalData() override
     {
         Optional_Data data;
@@ -95,7 +89,7 @@ public:
         return data;
     }
 
-    virtual void Initialize() override
+    virtual void Initialize(string modelPath) override
     {
         cout << "Initialze() is called" << endl;
         align_factor = ((int)(input_w * input_c)) & (-64);

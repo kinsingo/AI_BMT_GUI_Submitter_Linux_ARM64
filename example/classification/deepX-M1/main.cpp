@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
     string modelPath = model_path.string();
     try
     {
-        shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_SingleCore>(modelPath);
-        // shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_Wait>(modelPath);
-        // shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_CallBack>(modelPath);
+        shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_SingleCore>();
+        // shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_Wait>();
+        // shared_ptr<SNU_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_CallBack>();
         SNU_BMT_GUI_CALLER caller(interface, modelPath);
         return caller.call_BMT_GUI(argc, argv);
     }

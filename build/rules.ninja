@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__SNU_BMT_GUI_Submitter
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/local/bin/cmake -S/home/orange/Desktop/SNU_BMT_GUI_Submitter_Linux_ARM64 -B/home/orange/Desktop/SNU_BMT_GUI_Submitter_Linux_ARM64/build
+  command = /usr/local/bin/cmake -S/home/orange/jonghyun/SNU_BMT_GUI_Submitter_Linux_ARM64 -B/home/orange/jonghyun/SNU_BMT_GUI_Submitter_Linux_ARM64/build
   description = Re-running CMake...
   generator = 1
 
