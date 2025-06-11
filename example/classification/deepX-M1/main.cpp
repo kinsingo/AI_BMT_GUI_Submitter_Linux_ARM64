@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <opencv2/opencv.hpp>
 #include "dxrt/dxrt_api.h"
-#include "classification_multiCore_callBack.cpp"
 #include "classification_multiCore_wait.cpp"
 #include "classification_singleCore.cpp"
 using namespace std;
@@ -17,7 +16,6 @@ int main(int argc, char *argv[])
     {
         shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_SingleCore>();
         // shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_Wait>();
-        // shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_CallBack>();
         AI_BMT_GUI_CALLER caller(interface, modelPath);
         return caller.call_BMT_GUI(argc, argv);
     }

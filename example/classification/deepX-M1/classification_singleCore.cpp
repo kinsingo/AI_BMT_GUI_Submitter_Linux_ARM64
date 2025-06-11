@@ -4,10 +4,9 @@
 #include <opencv2/opencv.hpp>
 #include "dxrt/dxrt_api.h"
 using namespace std;
-
+using namespace cv;
 class Classification_Implementation_SingleCore : public AI_BMT_Interface
 {
-
     shared_ptr<dxrt::InferenceEngine> ie;
     int align_factor;
     int input_w = 224, input_h = 224, input_c = 3;
@@ -19,6 +18,7 @@ public:
         data.cpu_type = "Rockchip RK3588";
         data.accelerator_type = "M1(NPU) Sync";
         data.submitter = "DeepX";
+        data.benchmark_model = "regnet_y_800mf_opset10.dxnn";
         return data;
     }
 
@@ -34,8 +34,6 @@ public:
     {
         cv::Mat input;
         input = cv::imread(imagePath, cv::IMREAD_COLOR);
-        //  input = cv::imread(imagePath, cv::IMREAD_COLOR);
-        //  cv::resize(input, input, cv::Size(input_w, input_h));
         cv::cvtColor(input, input, cv::COLOR_BGR2RGB);
         vector<uint8_t> inputBuf(input_h * (input_w * input_c + align_factor));
         for (int y = 0; y < input_h; y++)
@@ -45,32 +43,20 @@ public:
         return inputBuf;
     }
 
-    int getArgMax(float *output_data, int number_of_classes)
-    {
-        int max_idx = 0;
-        for (int i = 0; i < number_of_classes; i++)
-        {
-            if (output_data[max_idx] < output_data[i])
-            {
-                max_idx = i;
-            }
-        }
-        return max_idx;
-    }
-
     virtual vector<BMTResult> runInference(const vector<VariantType> &data) override
     {
-        vector<BMTResult> batchResult;
-        const int batchSize = data.size();
-        for (int i = 0; i < batchSize; i++)
+        vector<BMTResult> queryResult;
+        const int querySize = data.size();
+        for (int i = 0; i < querySize; i++)
         {
             vector<uint8_t> inputBuf = get<vector<uint8_t>>(data[i]);
-            auto outputs = ie->Run(inputBuf.data());
             BMTResult result;
-            int index = (ie->outputs().front().type() == dxrt::DataType::FLOAT) ? getArgMax((float *)outputs.front()->data(), 1000) : *(uint16_t *)outputs.front()->data();
-            result.Classification_ImageNet_PredictedIndex_0_to_999 = index; // temporary value(0~999) is assigned here. It should be replaced with the actual predicted value.
-            batchResult.push_back(result);
+            auto outputs = ie->Run(inputBuf.data());
+            float *output_data = (float *)outputs.front()->data();
+            vector<float> output(output_data, output_data + 1000);
+            result.classProbabilities = output;
+            queryResult.push_back(result);
         }
-        return batchResult;
+        return queryResult;
     }
 };

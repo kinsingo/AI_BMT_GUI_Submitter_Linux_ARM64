@@ -13,6 +13,7 @@
 #include <condition_variable>
 
 using namespace std;
+using namespace cv;
 
 class Classification_Implementation_MultiCore_Wait : public AI_BMT_Interface
 {
@@ -27,6 +28,7 @@ public:
         data.cpu_type = "Rockchip RK3588";
         data.accelerator_type = "M1(NPU) Async(Wait)";
         data.submitter = "DeepX";
+        data.benchmark_model = "regnet_y_800mf_opset10.dxnn";
         return data;
     }
 
@@ -42,8 +44,6 @@ public:
     {
         cv::Mat input;
         input = cv::imread(imagePath, cv::IMREAD_COLOR);
-        //  input = cv::imread(imagePath, cv::IMREAD_COLOR);
-        //  cv::resize(input, input, cv::Size(input_w, input_h));
         cv::cvtColor(input, input, cv::COLOR_BGR2RGB);
         vector<uint8_t> inputBuf(input_h * (input_w * input_c + align_factor));
         for (int y = 0; y < input_h; y++)
@@ -51,19 +51,6 @@ public:
             memcpy(&inputBuf[y * (input_w * input_c + align_factor)], &input.data[y * input_w * input_c], input_w * input_c);
         }
         return inputBuf;
-    }
-
-    int getArgMax(float *output_data, int number_of_classes)
-    {
-        int max_idx = 0;
-        for (int i = 0; i < number_of_classes; i++)
-        {
-            if (output_data[max_idx] < output_data[i])
-            {
-                max_idx = i;
-            }
-        }
-        return max_idx;
     }
 
     virtual vector<BMTResult> runInference(const vector<VariantType> &data) override
@@ -95,12 +82,10 @@ public:
                                              {
                 auto outputs = ie->Wait(reqIds[index]);
                 inputBufs[index].clear(); // input buffer 해제
-
                 BMTResult result;
-                int predictedIndex = (ie->outputs().front().type() == dxrt::DataType::FLOAT)
-                                         ? getArgMax((float *)outputs.front()->data(), 1000)
-                                         : *(uint16_t *)outputs.front()->data();
-                result.Classification_ImageNet_PredictedIndex_0_to_999 = predictedIndex;
+                float *output_data = (float *)outputs.front()->data();
+                vector<float> output(output_data, output_data + 1000);
+                result.classProbabilities = output;
                 queryResult[index] = result; }));
             }
 

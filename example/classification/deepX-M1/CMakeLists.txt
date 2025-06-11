@@ -37,7 +37,6 @@ add_target(AI_BMT_GUI_Submitter)
 #Classification
 set(classification 
 classification_singleCore.cpp
-classification_multiCore_callBack.cpp
 classification_multiCore_wait.cpp)
 add_executable(run_classifier ${classification})
 add_target(run_classifier)
