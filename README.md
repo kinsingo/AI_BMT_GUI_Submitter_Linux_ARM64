@@ -1,4 +1,4 @@
-> **Last Updated:** 2025-05-29 (Hailo Classification/ObjectDetection Example Code Modified)
+> **Last Updated:** 2025-06-26 — Semantic Segmentation is now supported (example code included)
 
 ## Environment
 

@@ -1,4 +1,4 @@
-OpenCV and ONNX Runtime are required to build the example code "Image_Classification_Implementation.cpp".
+OpenCV and ONNX Runtime are required to build the example code "ObjectDetection_Implementation.cpp".
 After installing OpenCV and ONNX Runtime, make sure to add the following configuration to your CMakeLists.txt file:
 
 # OpenCV 
