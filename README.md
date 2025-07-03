@@ -205,6 +205,7 @@ export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
 
 **Execute AI-BMT App**
 
+- Using following commands in `build/` directory.
 ```bash
 export LD_LIBRARY_PATH=$(pwd)/lib:$LD_LIBRARY_PATH
 ./AI_BMT_GUI_Submitter
