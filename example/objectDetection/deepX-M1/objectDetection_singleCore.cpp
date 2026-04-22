@@ -1,3 +1,5 @@
+//Runtime Version v3.2.0
+
 #include "ai_bmt_gui_caller.h"
 #include "ai_bmt_interface.h"
 #include <filesystem>
@@ -43,23 +45,11 @@ public:
         return inputBuf;
     }
 
-    inline float sigmoid(float x)
-    {
-        return 1.0f / (1.0f + exp(-x));
-    }
-
     // Example Code for (YoloV5n/s/m)
     virtual vector<BMTVisionResult> inferVision(const vector<VariantType> &data) override
     {
         vector<BMTVisionResult> queryResult;
         const int querySize = data.size();
-
-        // YOLOv5n Anchor definitions (standard)
-        vector<vector<pair<float, float>>> anchors = {
-            {{10, 13}, {16, 30}, {33, 23}},     // P3: 80x80
-            {{30, 61}, {62, 45}, {59, 119}},    // P4: 40x40
-            {{116, 90}, {156, 198}, {373, 326}} // P5: 20x20
-        };
 
         vector<int> strides = {8, 16, 32};
 
@@ -70,11 +60,11 @@ public:
             BMTVisionResult result;
             float *output_data = (float *)outputs.front()->data();
 
-            //(25200 * 85) : Yolov5, Yolov7
+            //(25200 * 85) : Yolov7
             //(8400 * 85) : Yolov6
             //(84 * 8400) : Yolov5u, Yolov8, Yolov9, Yolo11, Yolo12
             //(300 * 6) : Yolov10
-            vector<float> output(output_data, output_data + (84 * 8400));
+            vector<float> output(output_data, output_data + (300 * 6));
             result.objectDetectionResult = output;
 
             queryResult.push_back(result);
