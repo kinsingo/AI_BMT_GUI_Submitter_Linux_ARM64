@@ -1,5 +1,7 @@
+#Compiler version v3.31
 
 import os
+import re
 import numpy as np
 import tensorflow as tf
 from PIL import Image
@@ -35,16 +37,40 @@ for har_file in har_files:
             print(f"[INFO]{quantized_model_har_path} is existing.. continue..")
             continue
 
-        # Default For GPU : (optimization_level=2,compression_level=1).
-        # Default For CPU : (optimization_level=0,compression_level=0).
-
         runner = ClientRunner(har=hailo_model_har_name)
-        # Load the model script to ClientRunner so it will be considered on optimization
+        opt_level = 2
         alls = (
-            "model_optimization_flavor(optimization_level=2,compression_level=1,batch_size=2)\n"
+            f"model_optimization_flavor(optimization_level={opt_level},compression_level=1,batch_size=2)\n"
             "color_convert = input_conversion(bgr_to_rgb, emulator_support=True)\n"
-            "norm_layer = normalization([0.0, 0.0, 0.0], [255.0, 255.0, 255.0])\n"
+            "normalization1 = normalization([0.0, 0.0, 0.0], [255.0, 255.0, 255.0])\n"
         )
+
+        # Auto-detect class prediction Conv layers and add change_output_activation(sigmoid).
+        # For models with 6 Conv end nodes (yolov5u/v8/v9/v10/yolo11/yolo12),
+        # class outputs (cv3) have more channels (80 for COCO) than box outputs (cv2, 64 channels).
+        # Skip for yolov6 (class end nodes are already Sigmoid) and yolov7/7x (Sigmoid end nodes).
+        if not re.search(r"yolov[67]", model_name.lower()):
+            hn = runner.get_hn()
+            layers = hn.get('layers', {})
+            output_convs = []
+            for name in sorted(layers.keys()):
+                layer = layers[name]
+                if layer.get('type') == 'output_layer':
+                    shapes = layer.get('output_shapes', [[]])
+                    inputs = layer.get('input', [])
+                    if inputs and shapes and len(shapes[0]) >= 4:
+                        conv_name = inputs[0].split('/')[-1]
+                        channels = shapes[0][3]
+                        output_convs.append((conv_name, channels))
+
+            if len(output_convs) >= 2:
+                min_ch = min(ch for _, ch in output_convs)
+                class_convs = [n for n, ch in output_convs if ch > min_ch]
+                for conv_name in class_convs:
+                    alls += f"change_output_activation({conv_name}, sigmoid)\n"
+                if class_convs:
+                    print(f"[INFO] Added change_output_activation(sigmoid) for: {', '.join(class_convs)}")
+
         runner.load_model_script(alls)
         # Call Optimize to perform the optimization process
         runner.optimize(calib_dataset) 
