@@ -1,5 +1,4 @@
 //Runtime Version v4.23
-
 #include "hailo/hailort.hpp"
 #include "ai_bmt_interface.h"
 #include "ai_bmt_gui_caller.h"
@@ -459,7 +458,10 @@ public:
     virtual VariantType preprocessVisionData(const string &imagePath) override
     {
         cv::Mat img = cv::imread(imagePath, cv::IMREAD_COLOR);
-        cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+        // cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+        if (img.rows != HEIGHT || img.cols != WIDTH) {
+            cv::resize(img, img, cv::Size(WIDTH, HEIGHT));
+        }
         vector<uint8_t> inputBuf(HEIGHT * WIDTH * 3);
         std::memcpy(inputBuf.data(), img.data, HEIGHT * WIDTH * 3);
         return inputBuf;
@@ -521,3 +523,4 @@ int main(int argc, char *argv[])
         cout << ex.what() << endl;
     }
 }
+
