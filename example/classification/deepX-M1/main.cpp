@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 {
     try
     {
-        shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_SingleCore>();
-        // shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_MultiCore_Wait>();
+        shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_DXNN>(false);
+        // shared_ptr<AI_BMT_Interface> interface = make_shared<Classification_Implementation_DXNN_MultiThreads>();
         return AI_BMT_GUI_CALLER::call_BMT_GUI_For_Single_Task(argc, argv, interface);
     }
     catch (const exception &ex)
