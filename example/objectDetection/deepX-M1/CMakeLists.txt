@@ -36,6 +36,7 @@ add_target(AI_BMT_GUI_Submitter)
 
 #Classification
 set(classification 
-objectDetection_singleCore.cpp)
+objectDetection_singleCore.cpp
+objectDetection_multiCore_wait.cpp)
 add_executable(run_classifier ${classification})
 add_target(run_classifier)
